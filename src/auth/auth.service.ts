@@ -6,10 +6,10 @@ import { UsersService } from 'src/users/users.service';
 export class AuthService {
     constructor(private readonly usersService: UsersService, private jwtService: JwtService) {}
 
-    async validateUser(username: string, password: string): Promise<any> {
-        const user = await this.usersService.findOne(username);
+    async validateUser(email: string, password: string): Promise<any> {
+        const user = await this.usersService.findOne(email);
         if (user && user.password === password) {
-            const { username, password, ...rest } = user;
+            const { email, password, ...rest } = user;
             return rest;
         }
         return null;

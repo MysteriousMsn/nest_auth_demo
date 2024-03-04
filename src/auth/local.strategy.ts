@@ -6,11 +6,15 @@ import { Strategy } from "passport-local";
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy){
     constructor(private authService: AuthService){
-        super();
+        // if want to replace username with  email as a login parameter then need to pass the below patameters in super.
+        super({
+            usernameField: 'email',
+            passwordField: 'password',
+          });
     }
 
-    async validate(username: string, password: string): Promise<any>{
-        const user = await this.authService.validateUser(username, password);
+    async validate(email: string, password: string): Promise<any>{
+        const user = await this.authService.validateUser(email, password);
 
         if(!user){
             throw new UnauthorizedException();
