@@ -1,19 +1,24 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
-import { AppService } from './app.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthenticatedGuard } from './auth/authenticated.guard';
+import { AuthService } from './auth/auth.service';
+import { JwtAuthGuard } from './auth/jwt.auth-guard';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Request() req): any {
-    return req.user;
+    return this.authService.login(req.user);
+    // user for passport local strategy
+    // return req.user;
   }
 
-  @UseGuards(AuthenticatedGuard)
+  @UseGuards(JwtAuthGuard)
+  // this is used when using passport local strategy
+  // @UseGuards(AuthenticatedGuard)
   @Get('protected')
   getHello(@Request() req): string {
     return req.user;
